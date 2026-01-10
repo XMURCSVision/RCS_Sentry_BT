@@ -59,15 +59,13 @@ blood_threshold: 50     # 血量阈值
 ### sentry_bt.xml
 ```xml
 <BehaviorTree ID="SentryMainTree">
-    <Repeat name="MainRepeat" num_cycles="-1">
-        <Fallback name="MainFallback">
-            <Sequence name="LowBloodSequence">
-                <IsBloodLow/>
-                <GotoSupply/>
-            </Sequence>
-            <Patrol/>
-        </Fallback>
-    </Repeat>
+      <Fallback name="MainFallback">
+          <Sequence name="LowBloodSequence">
+              <IsBloodLow/>
+              <GotoSupply/>
+          </Sequence>
+          <Patrol/>
+      </Fallback>
 </BehaviorTree>
 ```
 
@@ -130,12 +128,11 @@ ros2 topic pub /sentry_blood std_msgs/msg/Int32 "data: 80" --rate 1
 
 ### 核心逻辑
 ```
-Repeat (无限循环)
-└── Fallback (优先级选择)
-    ├── Sequence (血量补给流程)
-    │   ├── IsBloodLow (血量检查条件)
-    │   └── GotoSupply (补给导航动作)
-    └── Patrol (随机巡逻动作)
+Fallback (优先级选择)
+  ├── Sequence (血量补给流程)
+  │   ├── IsBloodLow (血量检查条件)
+  │   └── GotoSupply (补给导航动作)
+  └── Patrol (随机巡逻动作)
 ```
 
 ### 执行流程
@@ -193,12 +190,6 @@ blood_threshold: 50  # 0-100之间的整数
 [INFO] [sentry_bt_node]: 已设置补给点: x=0.00 y=0.00
 [INFO] [sentry_bt_node]: [Patrol]: 前往巡逻点 1/4
 [INFO] [sentry_bt_node]: [IsBloodLow]: 血量正常 (当前: 80, 阈值: 50)
-```
-
-### 调试模式
-```bash
-# 启用详细日志
-ros2 run sentry_bt sentry_bt --ros-args --log-level DEBUG
 ```
 
 ### 状态监控
