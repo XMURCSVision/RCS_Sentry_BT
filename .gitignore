@@ -1,0 +1,206 @@
+# ROS2 and C++ Build Artifacts
+build/
+install/
+log/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+cmake-build-*/
+*.cmake
+
+# C++ Compiled Objects
+*.o
+*.so
+*.a
+*.dylib
+*.dll
+*.exe
+
+# Qt Creator
+*.pro.user
+*.pro.user.*
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# CLion
+.idea/
+cmake-build-*/
+
+# Eclipse
+.project
+.cproject
+.settings/
+
+# Qt Creator
+CMakeLists.txt.user*
+
+# Temporary files
+*~
+*.swp
+*.swo
+*.tmp
+*.bak
+.DS_Store
+
+# ROS2 Logs and Bags
+*.bag
+*.db3
+*.bag.active
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+
+# Compiled extensions
+*.so
+
+# Cython debug symbols
+cython_debug/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+*.orig
+*.rej
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Build artifacts
+*.deb
+*.rpm
+*.tar.gz
+*.tar.bz2
+*.zip
+
+# ROS2 specific
+*.msg
+*.srv
+*.action
+*.launch
+*.rviz
+*.urdf
+*.xacro
+*.dae
+*.stl
+*.obj
+*.mtl
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.svg
+
+# Navigation maps
+*.pgm
+*.yaml
+maps/
+
+# Simulation
+*.world
+*.sdf
+
+# Documentation
+docs/_build/
+*.pdf
+*.docx
+
+# Temporary ROS2 files
+.ros/
+*.rosinstall
+*.rosinstall.bak
+
+# Colcon
+colcon.metadata
+colcon.lock
+
+# Gazebo
+.gazebo/
+
+# RViz
+*.rviz
+
+# PlotJuggler
+*.pjl
+
+# Foxglove
+*.foxglove
