@@ -25,6 +25,7 @@ add_executable(sentry_bt
   src/action_nodes/patrol.cpp
   src/action_nodes/gotoSupply.cpp
   src/condition_nodes/is_blood_low.cpp
+  src/condition_nodes/mode_node.cpp
 )
 
 ament_target_dependencies(sentry_bt
