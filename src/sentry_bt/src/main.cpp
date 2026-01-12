@@ -8,9 +8,9 @@
 #include "sentry_bt/action_nodes/patrol.hpp"
 #include "sentry_bt/action_nodes/gotoSupply.hpp"
 #include "sentry_bt/condition_nodes/is_blood_low.hpp"
+#include "sentry_bt/condition_nodes/mode_node.hpp"
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     rclcpp::init(argc, argv);
     auto ros_node = rclcpp::Node::make_shared("sentry_bt_node");
     RCLCPP_INFO(ros_node->get_logger(), "Sentry BT 节点启动！");
@@ -51,20 +51,19 @@ int main(int argc, char **argv)
     bt_blackboard->set("blackboard", blackboard);
 
     BT::BehaviorTreeFactory factory;
-    //注册节点
+    // 注册节点
     factory.registerNodeType<Goto>("Goto");
     factory.registerNodeType<GotoSupply>("GotoSupply");
     factory.registerNodeType<Patrol>("Patrol");
     factory.registerNodeType<IsBloodLow>("IsBloodLow");
+    factory.registerNodeType<ModeNode>("ModeNode");
 
     BT::Tree tree;
     tree = factory.createTreeFromFile("config/sentry_bt.xml", bt_blackboard);
     RCLCPP_INFO(ros_node->get_logger(), "行为树加载成功！");
 
-
     rclcpp::Rate rate(10);
-    while (rclcpp::ok())
-    {
+    while (rclcpp::ok()) {
         rclcpp::spin_some(ros_node);
         tree.tickRoot();
         rate.sleep();
