@@ -13,3 +13,5 @@ supply_point:
   y: 0.0
 
 blood_threshold: 50
+
+blood: 500

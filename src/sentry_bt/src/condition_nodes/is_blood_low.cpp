@@ -12,12 +12,12 @@ BT::PortsList IsBloodLow::providedPorts(){
 
 BT::NodeStatus IsBloodLow::tick(){
     if (blackboard->isBloodLow()) {
-        RCLCPP_INFO(node_->get_logger(), "[IsBloodLow]: 血量过低 (当前: %d, 阈值: %d)",
-                    blackboard->getBlood(), blackboard->getBloodThreshold());
+        RCLCPP_INFO(node_->get_logger(), "[IsBloodLow]: 血量过低 (当前: %d, 阈值: %d)",blackboard->getBlood(), blackboard->getBloodThreshold());
+        RCLCPP_INFO(node_->get_logger(), "[IsBloodLow]: 切换到防御姿态");
+        blackboard->setMode(2);
         return BT::NodeStatus::SUCCESS;
     } else {
-        RCLCPP_INFO(node_->get_logger(), "[IsBloodLow]: 血量正常 (当前: %d, 阈值: %d)",
-                     blackboard->getBlood(), blackboard->getBloodThreshold());
+        RCLCPP_INFO(node_->get_logger(), "[IsBloodLow]: 血量正常 (当前: %d, 阈值: %d)",blackboard->getBlood(), blackboard->getBloodThreshold());
         return BT::NodeStatus::FAILURE;
     }
 }

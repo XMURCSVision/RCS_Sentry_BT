@@ -1,18 +1,6 @@
 #include "sentry_bt/blackboard.hpp"
 
-Blackboard::Blackboard(rclcpp::Node::SharedPtr node) : node_(node) {
-    RCLCPP_INFO(node_->get_logger(), "[Blackboard]: 创建血量订阅者");
-    blood_sub_ = node_->create_subscription<std_msgs::msg::Int32>(
-        "/sentry_blood", 10, [this](const std_msgs::msg::Int32::SharedPtr msg) {
-            int old_blood = this->blood;
-            this->blood = msg->data;
-            RCLCPP_INFO(node_->get_logger(), "[Blackboard]: 收到血量更新: %d",this->blood);
-            if (this->blood < old_blood && this->getMode() == 0) {
-                RCLCPP_INFO(node_->get_logger(), "[Blackboard]: 受到攻击！血量变化: %d -> %d",old_blood, this->blood);
-                this->setMode(1);
-            }
-        });
-}
+Blackboard::Blackboard(rclcpp::Node::SharedPtr node) : node_(node) {}
 
 void Blackboard::setDestination(Point destination) {
     current_dest_ = destination;
@@ -61,3 +49,49 @@ void Blackboard::setFullBloodThreshold(int threshold) {
 int Blackboard::getFullBloodThreshold() const { return full_blood_threshold_; }
 
 bool Blackboard::isBloodFull() const { return blood >= full_blood_threshold_; }
+
+bool Blackboard::isAttacked() const { return consecutive_attack_ticks_ >= 2; }
+
+void Blackboard::updateBlood(int blood,rclcpp::Node::SharedPtr node_){
+    int old_blood = this->blood;
+    this->blood = blood;
+    RCLCPP_INFO(node_->get_logger(), "[Blackboard]: 收到血量更新: %d",
+                this->blood);
+
+    this->blood_history_.push_back(this->blood);
+    if (this->blood_history_.size() > 3) {
+        this->blood_history_.pop_front();
+    }
+    int damage = old_blood - this->blood;
+    if (damage > 0) {
+        if (damage >= 30) {
+        this->consecutive_attack_ticks_ = 2;
+        RCLCPP_INFO(node_->get_logger(), "[Blackboard]: 受到伤害: %d", damage);
+        } else {
+        if (this->blood_history_.size() >= 2) {
+            bool consecutive_damage = true;
+            for (size_t i = 1; i < this->blood_history_.size(); ++i) {
+            if (this->blood_history_[i] >=
+                this->blood_history_[i - 1]) {
+                consecutive_damage = false;
+                break;
+            }
+            }
+            if (consecutive_damage) {
+            this->consecutive_attack_ticks_ =
+                this->blood_history_.size();
+            } else {
+            this->consecutive_attack_ticks_ = 0;
+            }
+        }
+        }
+    } else {
+        this->consecutive_attack_ticks_ = 0;
+    }
+    if (this->isAttacked() && this->getMode() == 0) {
+        RCLCPP_INFO(node_->get_logger(),
+                    "[Blackboard]: 受到攻击！血量变化: %d -> %d", old_blood,
+                    this->blood);
+        this->setMode(1);
+    }
+} 

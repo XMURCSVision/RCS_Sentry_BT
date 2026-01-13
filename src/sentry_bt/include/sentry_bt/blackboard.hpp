@@ -5,6 +5,7 @@
 #include <string>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/int32.hpp>
+#include <deque>
 
 struct Point {
     double x = 0.0;
@@ -36,15 +37,17 @@ class Blackboard {
         int getFullBloodThreshold() const;
         bool isBloodFull() const;
 
-
-
         void setMode(int mode);
         int getMode() const;
         bool isMoveMode() const;    // mode == 0 (移动姿态)
         bool isAttackMode() const;  // mode == 1 (进攻姿态)
         bool isDefenseMode() const; // mode == 2 (防御姿态)
 
-    private:
+        bool isAttacked() const;
+
+        void updateBlood(int blood,rclcpp::Node::SharedPtr node_);
+
+      private:
         Point current_dest_;
         rclcpp::Node::SharedPtr node_;
         int blood = 100;
@@ -54,6 +57,10 @@ class Blackboard {
         int blood_threshold_ = 50;
         int full_blood_threshold_ = 100;
         rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr blood_sub_;
+
+        // 攻击检测相关
+        std::deque<int> blood_history_; // 最近的血量记录
+        int consecutive_attack_ticks_ = 0; // 连续被攻击的tick数
 };
 
 using BlackboardPtr = std::shared_ptr<Blackboard>;

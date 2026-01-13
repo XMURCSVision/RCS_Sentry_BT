@@ -131,8 +131,7 @@ void Patrol::goalResponseCallback(const GoalHandleNav::SharedPtr &goal_handle){
 }
 
 void Patrol::feedbackCallback(const GoalHandleNav::SharedPtr &,const std::shared_ptr<const NavigateToPose::Feedback> feedback){
-    RCLCPP_INFO(node_->get_logger(), "[Patrol]:巡逻点 %zu/%zu - 剩余距离: %.2f m", 
-                current_point_index_ + 1, patrol_points_.size(), feedback->distance_remaining);
+    RCLCPP_INFO(node_->get_logger(), "[Patrol]:巡逻点 %zu/%zu - 剩余距离: %.2f m", current_point_index_ + 1, patrol_points_.size(), feedback->distance_remaining);
 }
 
 
@@ -141,8 +140,7 @@ void Patrol::resultCallback(const GoalHandleNav::WrappedResult &result){
 
     switch (result.code){
     case rclcpp_action::ResultCode::SUCCEEDED:
-        RCLCPP_INFO(logger, "[Patrol]:已到达巡逻点 %zu/%zu！",
-                    current_point_index_ + 1, patrol_points_.size());
+        RCLCPP_INFO(logger, "[Patrol]:已到达巡逻点 %zu/%zu！",current_point_index_ + 1, patrol_points_.size());
 
         // 随机选择下一个巡逻点
         if (patrol_points_.size() > 1) {

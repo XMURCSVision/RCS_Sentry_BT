@@ -2,12 +2,13 @@
 #include <behaviortree_cpp_v3/behavior_tree.h>
 #include <behaviortree_cpp_v3/bt_factory.h>
 #include <yaml-cpp/yaml.h>
-
+#include "sentry_bt/ros/ros.hpp"
 #include "sentry_bt/blackboard.hpp"
 #include "sentry_bt/action_nodes/goto.hpp"
 #include "sentry_bt/action_nodes/patrol.hpp"
 #include "sentry_bt/action_nodes/gotoSupply.hpp"
 #include "sentry_bt/condition_nodes/is_blood_low.hpp"
+#include "sentry_bt/condition_nodes/is_attacked.hpp"
 #include "sentry_bt/condition_nodes/mode_node.hpp"
 
 int main(int argc, char **argv) {
@@ -42,6 +43,11 @@ int main(int argc, char **argv) {
             blackboard->setBloodThreshold(blood_threshold);
             RCLCPP_INFO(ros_node->get_logger(), "已设置血量阈值: %d", blood_threshold);
         }
+        if (config["blood"]) {
+          int blood = config["blood"].as<int>();
+          blackboard->setBlood(blood);
+          RCLCPP_INFO(ros_node->get_logger(), "已设置血量: %d",blood);
+        }
     } catch (const std::exception& e) {
         RCLCPP_ERROR(ros_node->get_logger(), "加载配置文件失败: %s", e.what());
     }
@@ -56,16 +62,20 @@ int main(int argc, char **argv) {
     factory.registerNodeType<GotoSupply>("GotoSupply");
     factory.registerNodeType<Patrol>("Patrol");
     factory.registerNodeType<IsBloodLow>("IsBloodLow");
+    factory.registerNodeType<IsAttacked>("IsAttacked");
     factory.registerNodeType<ModeNode>("ModeNode");
 
     BT::Tree tree;
     tree = factory.createTreeFromFile("config/sentry_bt.xml", bt_blackboard);
     RCLCPP_INFO(ros_node->get_logger(), "行为树加载成功！");
 
+    Ros ros(ros_node,blackboard);
+    
     rclcpp::Rate rate(10);
     while (rclcpp::ok()) {
         rclcpp::spin_some(ros_node);
         tree.tickRoot();
+        ros.publish();
         rate.sleep();
     }
 
