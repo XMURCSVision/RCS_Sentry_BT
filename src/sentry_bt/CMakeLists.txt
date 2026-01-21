@@ -21,12 +21,12 @@ include_directories(
 add_executable(sentry_bt
   src/main.cpp
   src/blackboard.cpp
-  src/action_nodes/goto.cpp
+  src/tactical_state_updater.cpp
   src/action_nodes/patrol.cpp
   src/action_nodes/gotoSupply.cpp
-  src/condition_nodes/is_blood_low.cpp
-  src/condition_nodes/mode_node.cpp
-  src/condition_nodes/is_attacked.cpp
+  src/action_nodes/attack_mode_selector.cpp
+  src/condition_nodes/is_tactical_mode.cpp
+  src/condition_nodes/is_attack_mode.cpp
   src/ros/ros.cpp
 )
 

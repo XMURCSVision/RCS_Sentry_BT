@@ -15,3 +15,9 @@ supply_point:
 blood_threshold: 50
 
 blood: 500
+
+ammo_full: 100
+ammo_threshold: 20
+ammo: 100
+
+enemy_lost_timeout_sec: 15.0

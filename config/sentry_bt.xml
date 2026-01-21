@@ -2,24 +2,21 @@
 <root BTCPP_format="4">
     <BehaviorTree ID="SentryMainTree">
         <Fallback name="PriorityFallback">
-            <Repeat name="SupplyRepeat" num_cycles="-1">
-                <Sequence name="LowBloodSequence">
-                    <IsBloodLow/>
-                    <GotoSupply/>
-                </Sequence>
-            </Repeat>
-            <Fallback name="ModeSelector">
-                <Sequence name="DefenseModeSequence">
-                    <ModeNode expected_mode="2"/>
-                </Sequence>
-                <Sequence name="AttackModeSequence">
-                    <ModeNode expected_mode="1"/>
-                </Sequence>
-                <Sequence name="MoveModeSequence">
-                    <ModeNode expected_mode="0"/>
-                    <Patrol/>
-                </Sequence>
-            </Fallback>
+            <Sequence name="Defense">
+                <IsTacticalMode expected_mode="DEFENSE"/>
+                <GotoSupply/>
+            </Sequence>
+
+            <Sequence name="Attack">
+                <IsTacticalMode expected_mode="ATTACK"/>
+                <AttackModeSelector/>
+                <Patrol/>
+            </Sequence>
+
+            <Sequence name="Move">
+                <IsTacticalMode expected_mode="MOVE"/>
+                <Patrol/>
+            </Sequence>
         </Fallback>
     </BehaviorTree>
 </root>
